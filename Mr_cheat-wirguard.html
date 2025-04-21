@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> ساخت کانفینگ وایرگارد توسط Mr_cheat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: center;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+        .start-button {
+            background-color: #007bff;
+            color: white;
+        }
+        .hidden {
+            display: none;
+        }
+        .input-container {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>ساخت کانفینگ وایرگارد توسط Mr_cheat🔐⚙️</h1>
+
+    <button class="start-button" id="startButton">⚡شروع ساخت کانفیگ </button>
+
+    <div id="configOptions" class="hidden">
+        <div class="input-container">
+            <label for="configName">📝اسم کانفیگ شما:</label>
+            <input type="text" id="configName" placeholder="نام کانفیگ بدون فاصله">
+        </div>
+        
+        <div class="input-container">
+            <label for="operator">📶اوپراتور خود را انتخاب کنید:</label>
+            <select id="operator">
+                <option value="irancell">🔸ایرانسل</option>
+                <option value="rightel">🔸رایتل</option>
+                <option value="hamrahAval">🔸همراه اول</option>
+                <option value="other">🔸سایر</option>
+            </select>
+        </div>
+        
+        <div class="input-container">
+            <label for="configType">🌟نوع کانفیگ خود را انتخاب کنید:</label>
+            <select id="configType">
+                <option value="vip">👑VIP</option>
+                <option value="gold">🥇Gold</option>
+                <option value="silver">🥈Silver</option>
+            </select>
+        </div>
+        
+        <button id="generateConfig">✅ساخت کانفیگ</button>
+    </div>
+
+    <script>
+        document.getElementById('startButton').onclick = function() {
+            document.getElementById('configOptions').classList.remove('hidden');
+            document.getElementById('startButton').classList.add('hidden');
+        };
+
+        document.getElementById('generateConfig').onclick = function() {
+            let configName = document.getElementById('configName').value;
+            let operator = document.getElementById('operator').value;
+            let configType = document.getElementById('configType').value;
+
+            // استفاده از یک نام پیش‌فرض در صورت وارد نکردن نام توسط کاربر
+            if (!configName) {
+                configName = 'your_config_name';  // نام پیش‌فرض
+            }
+
+            // ساخت کلیدهای تصادفی
+            function generateRandomKey() {
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                let result = '';
+                for (let i = 0; i < 42; i++) {
+                    result += characters.charAt(Math.floor(Math.random() * characters.length));
+                }
+                return result + 'c=';
+            }
+
+            // ساخت IP های تصادفی
+            function generateRandomIP() {
+                const first = 79;
+                const second = Math.floor(Math.random() * (235 - 10 + 1)) + 10;
+                const third = Math.floor(Math.random() * (235 - 10 + 1)) + 10;
+                const fourth = Math.floor(Math.random() * (235 - 10 + 1)) + 10;
+                return `${first}.${second}.${third}.${fourth}`;
+            }
+
+            // ساخت پورتراندوم
+            function generateRandomPort() {
+                return Math.floor(Math.random() * (3500 - 1000 + 1)) + 1000;
+            }
+
+            // ساخت کانفیگ
+            let config = `[Interface]
+PrivateKey = ${generateRandomKey()}
+Address = ${generateRandomIP()}
+ListenPort = ${generateRandomPort()}
+
+[Peer]
+PublicKey = ${generateRandomKey()}
+AllowedIPs = ${generateRandomIP()}`;
+
+            // ذخیره فایل به صورت .conf
+            let blob = new Blob([config], { type: 'text/plain' });
+            let link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+
+            // نام فایل با پسوند .conf ذخیره می‌شود (صرف‌نظر از ورودی کاربر)
+            link.download = configName.trim() + '.conf';
+            link.click();
+        };
+    </script>
+
+</body>
+</html>
